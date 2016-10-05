@@ -11,9 +11,19 @@ HUB_HOST = 'localhost'
 HUB_PORT = 3001
 random_port = random.randrange(8001, 8099)
 
+thermostat_information = {
+    "name": "",
+    "target": 70,
+    "current": random.randrange(65, 75),
+    "history": [],
+}
+
 class Thermostat(Resource):
     def get(self, target=None, current=None, history=None):
-        return ['get thermostat info']
+        current_temperature = random.randrange(65, 75)
+        thermostat_information['current'] = current_temperature
+        return thermostat_information
+
     def post(self, name=None, target=None):
         return ['post thermostat info']
 
