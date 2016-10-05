@@ -4,6 +4,7 @@ from flask_pymongo import PyMongo
 from flask import Flask, jsonify, redirect, url_for, request
 from flask_restful import Resource, Api
 import requests
+from requests.exceptions import ConnectionError
 
 app = Flask(__name__)
 app.config["MONGO_DBNAME"] = "birdcage_hub"
