@@ -28,7 +28,7 @@ my_info = {
 
 if __name__ == '__main__':
     # register this instance with the hub
-    requests.post(HUB_HOST + ':' + HUB_PORT, json=my_info)
+    requests.post(HUB_HOST + ':' + str(HUB_PORT), json=my_info)
 
     # need to check if we can actually bind to this port
     app.run(host='localhost', port=random_port)
