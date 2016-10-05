@@ -63,6 +63,9 @@ my_info = {
     "ip": "localhost",
     "port": random_port,
     "id": str(uuid.uuid1()),
+    "name": thermostat_information["name"],
+    "current": thermostat_information["current"],
+    "target": thermostat_information["target"],
 }
 
 if __name__ == '__main__':
