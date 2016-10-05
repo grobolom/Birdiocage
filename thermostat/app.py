@@ -21,6 +21,14 @@ thermostat_information = {
 class Thermostat(Resource):
     def get(self, target=None, current=None, history=None):
         current_temperature = random.randrange(65, 75)
+        
+        if current:
+            return {"current" : current_temperature}
+        if target:
+            return {"target": thermostat_information["target"]}
+        if history:
+            return {"history": thermostat_information["history"]}
+
         thermostat_information['current'] = current_temperature
         return thermostat_information
 
