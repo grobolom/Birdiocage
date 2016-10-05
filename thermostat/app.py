@@ -23,7 +23,7 @@ api.add_resource(Thermostat, '/')
 my_info = {
     "ip": "localhost",
     "port": random_port,
-    "id": uuid.uuid1(),
+    "id": str(uuid.uuid1()),
 }
 
 if __name__ == '__main__':
