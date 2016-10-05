@@ -45,6 +45,7 @@ def update_thermostat_data(query):
             thermostat["current"] = result.get("current")
             thermostat["target"] = result.get("target")
             thermostat["name"] = result.get("name")
+            thermostat["history"] = result.get("history")
 
             mongo.db.thermostat.replace_one({"id": thermostat.get("id")}, thermostat)
 

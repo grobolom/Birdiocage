@@ -67,6 +67,7 @@ my_info = {
     "name": thermostat_information["name"],
     "current": thermostat_information["current"],
     "target": thermostat_information["target"],
+    "history": thermostat_information["history"],
 }
 
 if __name__ == '__main__':
