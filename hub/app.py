@@ -37,7 +37,14 @@ class Thermostat(Resource):
 
 class Temperature(Resource):
     def get(self):
-        return ['get average temp']
+        result = mongo.db.thermostat.aggregate([{
+            "$group": {
+                "_id": None,
+                "avg_temp": { "$avg": "$current" }
+            }
+        }])
+        for r in result:
+            return JSONEncoder().encode({"status": "ok", "average_temperature": r["avg_temp"]})
 
 class Registry(Resource):
     def post(self):
