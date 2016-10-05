@@ -1,6 +1,6 @@
 import random
 import uuid
-from flask import Flask
+from flask import Flask, request
 from flask_restful import Resource, Api
 import requests
 
@@ -32,8 +32,26 @@ class Thermostat(Resource):
         thermostat_information['current'] = current_temperature
         return thermostat_information
 
-    def post(self, name=None, target=None):
-        return ['post thermostat info']
+    # if we were following better API design, this would likely be a
+    # put endpoint for the various fields, but for simplicity we are
+    # sticking with just the usual POST/GET until things get complex
+    def post(self):
+        data = request.get_json()
+
+        if not data:
+            return {"response": "ERROR"}
+
+        name = data.get("name")
+        if name:
+            thermostat_information["name"] = name
+
+        target = data.get("target")
+        if target:
+            thermostat_information["target"] = target
+
+        # in a more complex API, we would probably do a redirect_for to
+        # the correct endpoint
+        return thermostat_information
 
 api.add_resource(Thermostat,
     '/',
