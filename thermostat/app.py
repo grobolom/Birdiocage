@@ -19,14 +19,14 @@ thermostat_information = {
 }
 
 class Thermostat(Resource):
-    def get(self, target=None, current=None, history=None):
+    def get(self, fields=None):
         current_temperature = random.randrange(65, 75)
-        
-        if current:
+
+        if fields == "current":
             return {"current" : current_temperature}
-        if target:
+        elif fields == "target":
             return {"target": thermostat_information["target"]}
-        if history:
+        elif fields == "history":
             return {"history": thermostat_information["history"]}
 
         thermostat_information['current'] = current_temperature
@@ -35,7 +35,10 @@ class Thermostat(Resource):
     def post(self, name=None, target=None):
         return ['post thermostat info']
 
-api.add_resource(Thermostat, '/')
+api.add_resource(Thermostat,
+    '/',
+    '/<string:fields>',
+    endpoint='thermostat')
 
 
 my_info = {
