@@ -8,10 +8,10 @@ localhost:3001
 GET /thermostats
 GET /thermostats/:id
 POST /thermostats
-    temperature = Int
+    target = Int
 POST /thermostats
     id = Int
-    temperature = Int
+    target = Int
 GET /temperature
 
 POST /register
