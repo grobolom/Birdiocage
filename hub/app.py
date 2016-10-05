@@ -36,6 +36,7 @@ def update_thermostat_data(query):
         try:
             r = requests.get(url)
         except ConnectionError as e:
+            mongo.db.thermostat.delete_one({"id": thermostat.get("id")})
             continue
 
         if r:
