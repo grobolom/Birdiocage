@@ -2,6 +2,7 @@
 
 # Hub API
 
+```
 localhost:3001
 
 GET /thermostats
@@ -17,9 +18,11 @@ POST /register
     id = UID
     ip = IP
     port = Int
+```
 
 # Thermostat API
 
+```
 localhost:8001-8099
 
 GET /thermostat
@@ -28,3 +31,4 @@ GET /thermostat/:fields
 POST /info
     name = String
     target = Int
+```
