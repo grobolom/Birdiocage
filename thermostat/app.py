@@ -48,6 +48,7 @@ class Thermostat(Resource):
         target = data.get("target")
         if target:
             thermostat_information["target"] = target
+            thermostat_information["history"].append(target)
 
         # in a more complex API, we would probably do a redirect_for to
         # the correct endpoint
