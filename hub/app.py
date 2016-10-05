@@ -79,6 +79,8 @@ class Thermostat(Resource):
 
 class Temperature(Resource):
     def get(self):
+        update_thermostat_data({})
+
         result = mongo.db.thermostat.aggregate([{
             "$group": {
                 "_id": None,
