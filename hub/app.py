@@ -1,5 +1,5 @@
 from flask_pymongo import PyMongo
-from flask import Flask, jsonify
+from flask import Flask, jsonify, redirect, url_for
 from flask_restful import Resource, Api
 
 app = Flask(__name__)
@@ -32,9 +32,16 @@ class Temperature(Resource):
 
 class Registry(Resource):
     def post(self):
-        return ['post new thermostat']
+        data = request.get_json()
 
-api.add_resource(Thermostat, '/thermostats')
+        if not data:
+            return {"response": "ERROR"}
+
+        mongo.db.thermostat.insert(data)
+
+        return redirect(url_for("thermostats"))
+
+api.add_resource(Thermostat, '/thermostats', endpoint="thermostats")
 api.add_resource(Temperature, '/temperature')
 api.add_resource(Registry, '/register')
 
