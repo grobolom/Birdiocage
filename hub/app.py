@@ -3,6 +3,7 @@ from bson import ObjectId
 from flask_pymongo import PyMongo
 from flask import Flask, jsonify, redirect, url_for, request
 from flask_restful import Resource, Api
+import requests
 
 app = Flask(__name__)
 app.config["MONGO_DBNAME"] = "birdcage_hub"
@@ -16,24 +17,63 @@ class JSONEncoder(json.JSONEncoder):
             return str(o)
         return json.JSONEncoder.default(self, o)
 
+def update_thermostats(query, target):
+    cursor = mongo.db.thermostat.find(query)
+    for thermostat in cursor:
+        ip = str(thermostat.get('ip'))
+        port = str(thermostat.get('port'))
+        url = "http://" + ip + ":" + port + "/"
+        requests.post(url, json={"target":target})
+
+def update_thermostat_data(query):
+    cursor = mongo.db.thermostat.find(query)
+    data = []
+    for thermostat in cursor:
+        ip = str(thermostat.get('ip'))
+        port = str(thermostat.get('port'))
+        url = "http://" + ip + ":" + port + "/"
+
+        try:
+            r = requests.get(url)
+        except ConnectionError as e:
+            continue
+
+        if r:
+            result = r.json()
+            thermostat["current"] = result.get("current")
+            thermostat["target"] = result.get("target")
+            thermostat["name"] = result.get("name")
+
+            mongo.db.thermostat.replace_one({"id": thermostat.get("id")}, thermostat)
+
 class Thermostat(Resource):
     def get(self, id=None):
         data = []
 
         if id:
+            update_thermostat_data({"_id": ObjectId(id)})
             info = mongo.db.thermostat.find_one({"_id": ObjectId(id)})
             if info:
                 return JSONEncoder().encode({"status": "ok", "data": info})
             else:
                 return {"response": "no thermostat registered under id {}".format(id)}
 
+        update_thermostat_data({})
         cursor = mongo.db.thermostat.find(None, {"_id":1,"name": 1})
         for thermostat in cursor:
             data.append(thermostat)
         return JSONEncoder().encode({"response": data})
 
-    def post(self):
-        return ['post thermostats']
+    def post(self, id=None):
+        data = request.get_json()
+
+        query = {}
+        if id:
+            query = {"_id": ObjectId(id)}
+
+        update_thermostats(query, data.get('target'))
+
+        return redirect(url_for("thermostats"))
 
 class Temperature(Resource):
     def get(self):
@@ -55,7 +95,7 @@ class Registry(Resource):
 
         mongo.db.thermostat.insert(data)
 
-        return redirect(url_for("thermostats"))
+        return {"status": "ok"}
 
 api.add_resource(Thermostat, '/thermostats', endpoint="thermostats")
 api.add_resource(Thermostat, '/thermostats/<id>', endpoint="id")
