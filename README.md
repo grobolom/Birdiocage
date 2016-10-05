@@ -32,3 +32,26 @@ POST /info
     name = String
     target = Int
 ```
+
+# Installation and Running
+
+```
+# install requirements
+source venv/bin/activate
+pip install -r requirements.txt
+
+# build mongo container
+docker-compose build
+docker-compose start
+
+# run applications
+python hub/app.py &
+python thermostat/app.py &
+python thermostat/app.py &
+python thermostat/app.py &
+python thermostat/app.py &
+python thermostat/app.py &
+```
+
+In the future, we would run the hub through WSGI and spin up the smaller
+apps probably through docker containers
