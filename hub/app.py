@@ -23,7 +23,7 @@ def update_thermostats(query, target):
     for thermostat in cursor:
         ip = str(thermostat.get('ip'))
         port = str(thermostat.get('port'))
-        url = "http://" + ip + ":" + port + "/"
+        url = "http://%s:%s/" % (ip, port)
         requests.post(url, json={"target":target})
 
 def update_thermostat_data(query):
@@ -32,7 +32,7 @@ def update_thermostat_data(query):
     for thermostat in cursor:
         ip = str(thermostat.get('ip'))
         port = str(thermostat.get('port'))
-        url = "http://" + ip + ":" + port + "/"
+        url = "http://%s:%s/" % (ip, port)
 
         try:
             r = requests.get(url)

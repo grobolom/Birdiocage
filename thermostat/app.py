@@ -72,7 +72,8 @@ my_info = {
 
 if __name__ == '__main__':
     # register this instance with the hub
-    requests.post("http://" + HUB_HOST + ':' + str(HUB_PORT) + "/register", json=my_info)
+    register_url = "http://%s:%s/register" % (HUB_HOST, HUB_PORT)
+    requests.post(register_url, json=my_info)
 
     # need to check if we can actually bind to this port
     app.run(host='localhost', port=random_port)
